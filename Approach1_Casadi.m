@@ -83,13 +83,12 @@ function xx = Get_path(M)
 
     f = Function('f',{states,controls},{rhs}); % nonlinear mapping function f(x,u)
     U = SX.sym('U',n_controls,N); % Decision variables (controls)
-    P = SX.sym('P',n_states + n_states);
-    % parameters (which include at the initial state of the robot and the reference state)
+    P = SX.sym('P',n_states + n_states); % parameters (which include at the initial state of the robot and the reference state)
 
     X = SX.sym('X',n_states,(N+1));
     % A vector that represents the states over the optimization problem.
 
-    obj = 0; % Objective function
+    obj = 0; % objective function
     g = [];  % constraints vector
 
     Q = zeros(2,2); Q(1,1) = 2;Q(2,2) = 2.1;% % weighing matrices (states)
@@ -101,9 +100,9 @@ function xx = Get_path(M)
     for k = 1:N
         st = X(:,k);  con = U(:,k);
         vel = [con(1)*cos(con(2)) con(1)*sin(con(2))]; % to get [v*cos(theta),v*sin(theta)]
-        acc = (vel - vel_); vel_=vel(1); %To calculate the derivative of velocity for cost
-        obj = obj+(st-P(3:4))'*Q*(st-P(3:4))+ (acc(1)^2 + acc(2)^2)/0.5;%+ acc'*R*acc %+ con'*R*con; % calculate obj
-        st_next = X(:,k+1); %Objective function has additional term to ensure it goes to goal
+        acc = (vel - vel_); vel_=vel(1); % to calculate the derivative of velocity for cost
+        obj = obj+(st-P(3:4))'*Q*(st-P(3:4))+ (acc(1)^2 + acc(2)^2)/0.5;  % calculate obj
+        st_next = X(:,k+1); % objective function has additional term to ensure it goes to goal
         f_value = f(st,con);
         st_next_euler = st+ (T*f_value); % compute for next step
         g = [g;st_next-st_next_euler]; % compute constraints
