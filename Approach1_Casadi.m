@@ -2,9 +2,9 @@
 %% The robot might have to avoid obstacles, assume circular, with radius = 0.28
 %% The controls for the robot are its speed v and its angle (direction) theta
 %% The optimal control problem is of the form:
-%% J = integral( 2nd derivative of x + 2nd derivative of y)
-%% subject to:  derivative of x = v * cos(theta)
-%%              derivative of y = v * sin(theta)
+% $$J = \int_{0,0}^{1.2,1.6} \frac{d^2 x}{dt^2} + \frac{d^2 y}{dt^2}$$
+% subject to:  $$ \frac{d x}{dt} = v * cos(theta)$$
+%              $$ \frac{d y}{dt} = v * sin(theta)$$
 %% as well as obstacle constraints 
 %% The software Casadi has been used to solve this
 clear all
